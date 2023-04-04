@@ -12,4 +12,6 @@ public interface StudentService {
     ResponseEntity<String> deleteStudent(Long id);
 
     ResponseEntity<String> createStudent(StudentDTO student);
+
+    ResponseEntity<String> updateStudent(Long id, StudentDTO studentDTO);
 }

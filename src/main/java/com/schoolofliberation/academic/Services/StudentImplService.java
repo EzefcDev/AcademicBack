@@ -60,4 +60,19 @@ public class StudentImplService implements StudentService {
         studentRepository.save(student);
         return new ResponseEntity<>("Estudiante creado", HttpStatus.OK);
     }
+
+    public ResponseEntity<String> updateStudent(Long id, StudentDTO studentDTO){
+        boolean studentExist = studentRepository.existsById(id);
+        if (!studentExist) {
+            return new ResponseEntity<>("El estudiante con id: " + id + " no esxite", HttpStatus.BAD_REQUEST);
+        }
+        Student updateStudent = studentRepository.findById(id).get();
+        updateStudent.setName(studentDTO.getName());
+        updateStudent.setLastname(studentDTO.getLastname());
+        updateStudent.setDni(studentDTO.getDni());
+        updateStudent.setStudentCareer(studentDTO.getStudentCareer());
+        updateStudent.setStudentStatus(typeRepository.findByMeaningContaining(studentDTO.getStudentStatusMeaning()));
+        studentRepository.save(updateStudent);
+        return new ResponseEntity<>("El estudiante se actualizo correctamente", HttpStatus.OK);
+    }
 }
