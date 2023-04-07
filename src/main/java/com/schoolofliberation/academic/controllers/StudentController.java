@@ -1,9 +1,11 @@
 package com.schoolofliberation.academic.controllers;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +18,7 @@ import com.schoolofliberation.academic.Services.StudentService;
 import com.schoolofliberation.academic.dto.StudentDTO;
 
 @RestController
+@Validated
 public class StudentController {
     
     @Autowired
@@ -27,7 +30,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/student/{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable(name = "id") Long id){
+    public ResponseEntity<String> deleteStudent(@PathVariable(name = "id") @Min(1) Long id){
         return studentService.deleteStudent(id);
     }
 
@@ -37,7 +40,12 @@ public class StudentController {
     }
 
     @PutMapping("/student/{id}")
-    public ResponseEntity<String> updateStudent(@PathVariable(name = "id") Long id, @RequestBody @Valid StudentDTO studentDTO){
+    public ResponseEntity<String> updateStudent(@PathVariable(name = "id") @Min(1) Long id, @RequestBody @Valid StudentDTO studentDTO){
         return studentService.updateStudent(id, studentDTO);
     }
+
+    @GetMapping("/student/{id}")
+    public ResponseEntity<Object> findStudent(@PathVariable(name = "id") @Min(1) Long id){
+        return studentService.getStudent(id);
+    } 
 }

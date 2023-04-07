@@ -5,6 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.PageRequest;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,5 +77,13 @@ public class StudentImplService implements StudentService {
         updateStudent.setStudentStatus(typeRepository.findByMeaningContaining(studentDTO.getStudentStatusMeaning()));
         studentRepository.save(updateStudent);
         return new ResponseEntity<>("El estudiante se actualizo correctamente", HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> getStudent(Long id){
+        Optional<Student> student = studentRepository.findById(id);
+        if (student.isPresent()) {
+            return new ResponseEntity<>(student.get() ,HttpStatus.OK);
+        }
+        return new ResponseEntity<>("El estudiante con id: " + id + " no esxite", HttpStatus.BAD_REQUEST);
     }
 }
