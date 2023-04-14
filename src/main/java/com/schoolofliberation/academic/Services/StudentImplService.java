@@ -15,7 +15,10 @@ import com.schoolofliberation.academic.Repositories.*;
 import com.schoolofliberation.academic.dto.StudentDTO;
 import com.schoolofliberation.academic.entities.*;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class StudentImplService implements StudentService {
     
     @Autowired
@@ -29,12 +32,15 @@ public class StudentImplService implements StudentService {
         Pageable pageable = PageRequest.of(page, size);
         if (name.isEmpty()) {
             Page<Student> listStudents = studentRepository.findAll(pageable);
+            log.info("Devolucion de alumnos sin parametro de busqueda");
             return new ResponseEntity<>(listStudents,HttpStatus.OK);
         } else{
             Page<Student> listSearch = studentRepository.findByNameContaining(name, pageable);
             if (listSearch.isEmpty()) {
+                log.error("no se encontraron alumnos, lista vacia");
                 return new ResponseEntity<>(listSearch,HttpStatus.BAD_REQUEST);
             } else {
+                log.info("Devolucion de alumnos con parametro de busqueda");
                 return new ResponseEntity<>(listSearch,HttpStatus.OK);
             }
         }
@@ -44,14 +50,17 @@ public class StudentImplService implements StudentService {
         boolean studentExist = studentRepository.findById(id).isPresent();
         if (studentExist) {
             studentRepository.deleteById(id);
+            log.info("Eliminación del estudiante con id: " + id);
             return new ResponseEntity<>("El estudiante se elemino correctamente", HttpStatus.OK);
         } else {
+            log.error("No existe el estudiante con id: " + id);
             return new ResponseEntity<>("Estudiante no existe con ese id o ya fue eliminado", HttpStatus.BAD_REQUEST);
         }
     }
 
     public ResponseEntity<String> createStudent(StudentDTO newStudent){
         if (studentRepository.existsByDni(newStudent.getDni())) {
+            log.error("El estudiante con dni: " + newStudent.getDni() + " ya existe");
             return new ResponseEntity<>("Estudiante ya existe", HttpStatus.BAD_REQUEST);
         }
         Student student = new Student();
@@ -61,12 +70,14 @@ public class StudentImplService implements StudentService {
         student.setStudentCareer(newStudent.getStudentCareer());
         student.setStudentStatus(typeRepository.findByMeaningContaining(newStudent.getStudentStatusMeaning()));
         studentRepository.save(student);
+        log.info("El estudiante se creo correctamente");
         return new ResponseEntity<>("Estudiante creado", HttpStatus.OK);
     }
 
     public ResponseEntity<String> updateStudent(Long id, StudentDTO studentDTO){
         boolean studentExist = studentRepository.existsById(id);
         if (!studentExist) {
+            log.error("No existe el estudiante con id: " + id);
             return new ResponseEntity<>("El estudiante con id: " + id + " no esxite", HttpStatus.BAD_REQUEST);
         }
         Student updateStudent = studentRepository.findById(id).get();
@@ -76,14 +87,17 @@ public class StudentImplService implements StudentService {
         updateStudent.setStudentCareer(studentDTO.getStudentCareer());
         updateStudent.setStudentStatus(typeRepository.findByMeaningContaining(studentDTO.getStudentStatusMeaning()));
         studentRepository.save(updateStudent);
+        log.info("Estudiante actualizado correctamente");
         return new ResponseEntity<>("El estudiante se actualizo correctamente", HttpStatus.OK);
     }
 
     public ResponseEntity<Object> getStudent(Long id){
         Optional<Student> student = studentRepository.findById(id);
         if (student.isPresent()) {
+            log.info("Estudiante esta presente, se muestran sus datos");
             return new ResponseEntity<>(student.get() ,HttpStatus.OK);
         }
+        log.error("No existe el estudiante con id: " + id);
         return new ResponseEntity<>("El estudiante con id: " + id + " no esxite", HttpStatus.BAD_REQUEST);
     }
 }
