@@ -2,6 +2,7 @@ package com.schoolofliberation.academic.Services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.PageRequest;
@@ -28,8 +29,9 @@ public class StudentImplService implements StudentService {
     TypeRepository typeRepository;
 
     @Override
-    public ResponseEntity<Object>  getStudents(Integer page, Integer size, String name){
-        Pageable pageable = PageRequest.of(page, size);
+    public ResponseEntity<Object>  getStudents(Integer page, Integer size, String name, String orientation){
+        Sort.Direction direction = orientation.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC ;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction,"id"));
         if (!name.isEmpty()) {
             Page<Student> listSearch = studentRepository.findByNameContaining(name, pageable);
             if (!listSearch.isEmpty()) {

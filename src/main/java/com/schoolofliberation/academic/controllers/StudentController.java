@@ -30,8 +30,12 @@ public class StudentController {
 
     @Operation(summary = "Trae todos los estudiantes del sistema", description = "Muestra la lista de todos los estudiantes registrados a traves de un paginado, tambien podemos indicar un nombre y nos mostrar la lista de todas las coincidencias con ese nombre")
     @GetMapping("/students")
-    public ResponseEntity<Object> findAllStudents(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size, @RequestParam(required = false, name="name", defaultValue = "") String name){
-        return studentService.getStudents(page, size, name);
+    public ResponseEntity<Object> findAllStudents(
+        @RequestParam(defaultValue = "0") Integer page, 
+        @RequestParam(defaultValue = "10") Integer size, 
+        @RequestParam(required = false, name="name", defaultValue = "") String name,
+        @RequestParam(defaultValue = "asc") String orientation){
+        return studentService.getStudents(page, size, name, orientation);
     }
 
     @Operation(summary = "Elimina el estudiante indicado", description = "Eliminación del estudiante a traves del id")
