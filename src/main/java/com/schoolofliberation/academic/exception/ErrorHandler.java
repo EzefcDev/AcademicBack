@@ -49,4 +49,9 @@ public class ErrorHandler {
     public ResponseEntity<String> handlerHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
         return new ResponseEntity<>("El parametro es requerido", HttpStatus.METHOD_NOT_ALLOWED);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handlerIllegalArgumentException(IllegalArgumentException e){
+        return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
