@@ -29,9 +29,9 @@ public class StudentImplService implements StudentService {
     TypeRepository typeRepository;
 
     @Override
-    public ResponseEntity<Object>  getStudents(Integer page, Integer size, String name, String orientation){
+    public ResponseEntity<Object>  getStudents(Integer page, Integer size, String name, String orientation, String orderBy){
         // Sort.Direction direction = orientation.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC ;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(orientation),"id"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(orientation),orderBy));
         if (!name.isEmpty()) {
             Page<Student> listSearch = studentRepository.findByNameContaining(name, pageable);
             if (!listSearch.isEmpty()) {

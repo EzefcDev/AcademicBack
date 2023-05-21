@@ -34,8 +34,9 @@ public class StudentController {
         @RequestParam(defaultValue = "0") Integer page, 
         @RequestParam(defaultValue = "10") Integer size, 
         @RequestParam(required = false, name="name", defaultValue = "") String name,
-        @RequestParam(defaultValue = "asc") String orientation){
-        return studentService.getStudents(page, size, name, orientation);
+        @RequestParam(defaultValue = "asc") String orientation,
+        @RequestParam(defaultValue = "id") String orderBy){
+        return studentService.getStudents(page, size, name, orientation, orderBy);
     }
 
     @Operation(summary = "Elimina el estudiante indicado", description = "Eliminación del estudiante a traves del id")

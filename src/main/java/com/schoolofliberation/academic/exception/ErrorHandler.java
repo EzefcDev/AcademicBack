@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.validation.ConstraintViolationException;
 
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -52,6 +53,11 @@ public class ErrorHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handlerIllegalArgumentException(IllegalArgumentException e){
+        return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<String> handlerPropertyReferenceException(PropertyReferenceException e){
         return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
     }
 }

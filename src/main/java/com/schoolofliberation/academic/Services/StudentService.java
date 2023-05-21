@@ -7,7 +7,7 @@ import com.schoolofliberation.academic.dto.StudentDTO;
 
 public interface StudentService {
     
-    ResponseEntity<Object>  getStudents(Integer page, Integer size, String name, String orientation);
+    ResponseEntity<Object>  getStudents(Integer page, Integer size, String name, String orientation, String orderBy);
 
     ResponseEntity<String> deleteStudent(Long id);
 
