@@ -28,9 +28,10 @@ public class StudentImplService implements StudentService {
     @Autowired
     TypeRepository typeRepository;
 
+    private static final String STUDENT_NO_EXIST = "No existe el estudiante con id: ";
+
     @Override
     public ResponseEntity<Object>  getStudents(Integer page, Integer size, String name, String orientation, String orderBy){
-        // Sort.Direction direction = orientation.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC ;
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(orientation),orderBy));
         if (!name.isEmpty()) {
             Page<Student> listSearch = studentRepository.findByNameContaining(name, pageable);
@@ -49,7 +50,7 @@ public class StudentImplService implements StudentService {
     public ResponseEntity<String> deleteStudent(Long id){
         boolean studentExist = studentRepository.findById(id).isPresent();
         if (!studentExist) {
-            log.error("No existe el estudiante con id: " + id);
+            log.error(STUDENT_NO_EXIST + id);
             return new ResponseEntity<>("Estudiante no existe con ese id o ya fue eliminado", HttpStatus.BAD_REQUEST);
         }
         studentRepository.deleteById(id);
@@ -76,7 +77,7 @@ public class StudentImplService implements StudentService {
     public ResponseEntity<String> updateStudent(Long id, StudentDTO studentDTO){
         boolean studentExist = studentRepository.existsById(id);
         if (!studentExist) {
-            log.error("No existe el estudiante con id: " + id);
+            log.error(STUDENT_NO_EXIST + id);
             return new ResponseEntity<>("El estudiante con id: " + id + " no esxite", HttpStatus.BAD_REQUEST);
         }
         Student updateStudent = studentRepository.findById(id).get();
@@ -96,7 +97,7 @@ public class StudentImplService implements StudentService {
             log.info("Estudiante esta presente, se muestran sus datos");
             return new ResponseEntity<>(student.get() ,HttpStatus.OK);
         }
-        log.error("No existe el estudiante con id: " + id);
+        log.error(STUDENT_NO_EXIST + id);
         return new ResponseEntity<>("El estudiante con id: " + id + " no esxite", HttpStatus.BAD_REQUEST);
     }
 }
