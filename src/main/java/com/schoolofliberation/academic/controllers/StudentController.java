@@ -22,13 +22,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @Validated
-@Tag(name = "Maneja estudiantes", description = "Operciones pertinentes para manejar el registro de estudiantes")
+@Tag(name = "Maneja estudiantes", description = "Operaciones pertinentes para manejar el registro de estudiantes")
 public class StudentController {
     
     @Autowired
     StudentService studentService;
 
-    @Operation(summary = "Trae todos los estudiantes del sistema", description = "Muestra la lista de todos los estudiantes registrados a traves de un paginado, tambien podemos indicar un nombre y nos mostrar la lista de todas las coincidencias con ese nombre")
+    @Operation(summary = "Trae todos los estudiantes del sistema", description = "Muestra la lista de todos los estudiantes registrados a traves de un paginado, también podemos indicar un nombre y nos mostrar la lista de todas las coincidencias con ese nombre")
     @GetMapping("/students")
     public ResponseEntity<Object> findAllStudents(
         @RequestParam(defaultValue = "0") Integer page, 
@@ -45,13 +45,13 @@ public class StudentController {
         return studentService.deleteStudent(id);
     }
 
-    @Operation(summary = "Crea un estudiante",description = "Creación del estudiante pasandole el nombre, apellido, dni, estado de la carrera")
+    @Operation(summary = "Crea un estudiante",description = "Creación del estudiante pasándole el nombre, apellido, dni, estado de la carrera")
     @PostMapping("/student")
     public ResponseEntity<String> createStudent(@RequestBody @Valid StudentDTO newStudent){
         return studentService.createStudent(newStudent);
     }
 
-    @Operation(summary = "Actualiza el estudiante indicado",description = "Actualización del estudiante pasandole el id y los parametros para actualizar")
+    @Operation(summary = "Actualiza el estudiante indicado",description = "Actualización del estudiante pasandole el id y los parámetros para actualizar")
     @PutMapping("/student/{id}")
     public ResponseEntity<String> updateStudent(@PathVariable(name = "id") @Min(1) Long id, @RequestBody @Valid StudentDTO studentDTO){
         return studentService.updateStudent(id, studentDTO);
