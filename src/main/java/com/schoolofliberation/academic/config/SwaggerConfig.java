@@ -16,7 +16,7 @@ public class SwaggerConfig {
             .info(new Info()
                 .title("Academia")
                 .version(appVersion)
-                .description("Sistema de manajo de estudiantes")
+                .description("Sistema de manejo de estudiantes")
             );
     }
 }

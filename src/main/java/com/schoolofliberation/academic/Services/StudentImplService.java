@@ -36,14 +36,14 @@ public class StudentImplService implements StudentService {
         if (!name.isEmpty()) {
             Page<Student> listSearch = studentRepository.findByNameContaining(name, pageable);
             if (!listSearch.isEmpty()) {
-                log.info("Devolucion de alumnos con parametro de busqueda");
+                log.info("Devolución de alumnos con parámetro de búsqueda");
                 return new ResponseEntity<>(listSearch,HttpStatus.OK);
             } 
-            log.error("no se encontraron alumnos, lista vacia");
+            log.error("no se encontraron alumnos, lista vacía");
             return new ResponseEntity<>(listSearch,HttpStatus.BAD_REQUEST);
         } 
         Page<Student> listStudents = studentRepository.findAll(pageable);
-        log.info("Devolucion de alumnos sin parametro de busqueda");
+        log.info("Devolución de alumnos sin parámetro de búsqueda");
         return new ResponseEntity<>(listStudents,HttpStatus.OK);
     }
 
@@ -55,7 +55,7 @@ public class StudentImplService implements StudentService {
         }
         studentRepository.deleteById(id);
         log.info("Eliminación del estudiante con id: " + id);
-        return new ResponseEntity<>("El estudiante se elemino correctamente", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("El estudiante se elimino correctamente", HttpStatus.ACCEPTED);
     }
 
     public ResponseEntity<String> createStudent(StudentDTO newStudent){
@@ -78,7 +78,7 @@ public class StudentImplService implements StudentService {
         boolean studentExist = studentRepository.existsById(id);
         if (!studentExist) {
             log.error(STUDENT_NO_EXIST + id);
-            return new ResponseEntity<>("El estudiante con id: " + id + " no esxite", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("El estudiante con id: " + id + " no existe", HttpStatus.BAD_REQUEST);
         }
         Student updateStudent = studentRepository.findById(id).get();
         updateStudent.setName(studentDTO.getName());
@@ -98,6 +98,6 @@ public class StudentImplService implements StudentService {
             return new ResponseEntity<>(student.get() ,HttpStatus.OK);
         }
         log.error(STUDENT_NO_EXIST + id);
-        return new ResponseEntity<>("El estudiante con id: " + id + " no esxite", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("El estudiante con id: " + id + " no existe", HttpStatus.BAD_REQUEST);
     }
 }

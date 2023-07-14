@@ -33,7 +33,7 @@ public class ErrorHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handlerMessageNotReadableException(HttpMessageNotReadableException e){
-        return new ResponseEntity<>("El cuerpo no puede estar vacio", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("El cuerpo no puede estar vació", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -43,12 +43,12 @@ public class ErrorHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<String> handlerMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
-        return new ResponseEntity<>("Valor de tipo erroneo", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Valor de tipo erróneo", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<String> handlerHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
-        return new ResponseEntity<>("El parametro es requerido", HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>("El parámetro es requerido", HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
