@@ -31,7 +31,7 @@ public class StudentImplService implements StudentService {
     private static final String STUDENT_NO_EXIST = "No existe el estudiante con id: ";
 
     @Override
-    public ResponseEntity<Object>  getStudents(Integer page, Integer size, String name, String orientation, String orderBy){
+    public ResponseEntity<Object> getStudents(Integer page, Integer size, String name, String orientation, String orderBy){
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(orientation),orderBy));
         if (!name.isEmpty()) {
             Page<Student> listSearch = studentRepository.findByNameContaining(name, pageable);
@@ -55,7 +55,7 @@ public class StudentImplService implements StudentService {
         }
         studentRepository.deleteById(id);
         log.info("Eliminación del estudiante con id: " + id);
-        return new ResponseEntity<>("El estudiante se elemino correctamente", HttpStatus.OK);
+        return new ResponseEntity<>("El estudiante se elemino correctamente", HttpStatus.ACCEPTED);
     }
 
     public ResponseEntity<String> createStudent(StudentDTO newStudent){
@@ -71,7 +71,7 @@ public class StudentImplService implements StudentService {
         student.setStudentStatus(typeRepository.findByMeaningContaining(newStudent.getStudentStatusMeaning()));
         studentRepository.save(student);
         log.info("El estudiante se creo correctamente");
-        return new ResponseEntity<>("Estudiante creado", HttpStatus.OK);
+        return new ResponseEntity<>("Estudiante creado", HttpStatus.CREATED);
     }
 
     public ResponseEntity<String> updateStudent(Long id, StudentDTO studentDTO){
@@ -88,7 +88,7 @@ public class StudentImplService implements StudentService {
         updateStudent.setStudentStatus(typeRepository.findByMeaningContaining(studentDTO.getStudentStatusMeaning()));
         studentRepository.save(updateStudent);
         log.info("Estudiante actualizado correctamente");
-        return new ResponseEntity<>("El estudiante se actualizo correctamente", HttpStatus.OK);
+        return new ResponseEntity<>("El estudiante se actualizo correctamente", HttpStatus.ACCEPTED);
     }
 
     public ResponseEntity<Object> getStudent(Long id){
