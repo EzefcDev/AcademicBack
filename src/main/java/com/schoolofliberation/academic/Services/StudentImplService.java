@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.schoolofliberation.academic.Repositories.*;
+import com.schoolofliberation.academic.converters.StudentConverter;
 import com.schoolofliberation.academic.dto.StudentDTO;
 import com.schoolofliberation.academic.entities.*;
 
@@ -27,6 +28,9 @@ public class StudentImplService implements StudentService {
 
     @Autowired
     TypeRepository typeRepository;
+
+    @Autowired
+    StudentConverter studentConverter;
 
     private static final String STUDENT_NO_EXIST = "No existe el estudiante con id: ";
 
@@ -63,13 +67,7 @@ public class StudentImplService implements StudentService {
             log.error("El estudiante con dni: " + newStudent.getDni() + " ya existe");
             return new ResponseEntity<>("Estudiante ya existe", HttpStatus.BAD_REQUEST);
         }
-        Student student = new Student();
-        student.setDni(newStudent.getDni());
-        student.setName(newStudent.getName());
-        student.setLastname(newStudent.getLastname());
-        student.setStudentCareer(newStudent.getStudentCareer());
-        student.setStudentStatus(typeRepository.findByMeaningContaining(newStudent.getStudentStatusMeaning()));
-        studentRepository.save(student);
+        studentRepository.save(studentConverter.dtoToEntity(newStudent));
         log.info("El estudiante se creo correctamente");
         return new ResponseEntity<>("Estudiante creado", HttpStatus.CREATED);
     }
@@ -80,12 +78,8 @@ public class StudentImplService implements StudentService {
             log.error(STUDENT_NO_EXIST + id);
             return new ResponseEntity<>("El estudiante con id: " + id + " no existe", HttpStatus.BAD_REQUEST);
         }
-        Student updateStudent = studentRepository.findById(id).get();
-        updateStudent.setName(studentDTO.getName());
-        updateStudent.setLastname(studentDTO.getLastname());
-        updateStudent.setDni(studentDTO.getDni());
-        updateStudent.setStudentCareer(studentDTO.getStudentCareer());
-        updateStudent.setStudentStatus(typeRepository.findByMeaningContaining(studentDTO.getStudentStatusMeaning()));
+        Student updateStudent = studentConverter.dtoToEntity(studentDTO);
+        updateStudent.setId(id);
         studentRepository.save(updateStudent);
         log.info("Estudiante actualizado correctamente");
         return new ResponseEntity<>("El estudiante se actualizo correctamente", HttpStatus.ACCEPTED);
