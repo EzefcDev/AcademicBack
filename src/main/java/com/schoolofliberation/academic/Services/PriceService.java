@@ -19,15 +19,18 @@ public class PriceService {
     @Autowired
     PriceRepository priceRepository;
     public ResponseEntity<Object> getAllPrice(){
+        List<Price> prices = priceRepository.findAll();
+        return new ResponseEntity<>(prices,HttpStatus.OK);
+    }
+
+    public void jobPrice(){
         Double dollarPrice = getDollar();
         List<Price> prices = priceRepository.findAll();
-        List<Price> actualPrices = new ArrayList<>();
         for (Price price : prices) {
             Double priceCareer = price.getPriceDollar() * dollarPrice ;
             price.setPriceCareer(priceCareer);
-            actualPrices.add(price);
+            priceRepository.save(price);
         }
-        return new ResponseEntity<>(actualPrices,HttpStatus.OK);
     }
 
     public Double getDollar(){
