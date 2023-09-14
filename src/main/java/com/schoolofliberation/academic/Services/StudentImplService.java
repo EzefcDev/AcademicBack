@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.PageRequest;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class StudentImplService implements StudentService {
     public ResponseEntity<Object> getStudents(Integer page, Integer size, String name, String orientation, String orderBy){
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(orientation),orderBy));
         if (!name.isEmpty()) {
-            Page<Student> listSearch = studentRepository.findByNameContaining(name, pageable);
+            Page<Student> listSearch = studentRepository.findByNameWithoutDeleteAt(name, pageable);
             if (!listSearch.isEmpty()) {
                 log.info("Devolución de alumnos con parámetro de búsqueda");
                 return new ResponseEntity<>(listSearch,HttpStatus.OK);
@@ -46,18 +47,20 @@ public class StudentImplService implements StudentService {
             log.error("no se encontraron alumnos, lista vacía");
             return new ResponseEntity<>(listSearch,HttpStatus.BAD_REQUEST);
         } 
-        Page<Student> listStudents = studentRepository.findAll(pageable);
+        Page<Student> listStudents = studentRepository.findAllWithoutDeleteAt(pageable);
         log.info("Devolución de alumnos sin parámetro de búsqueda");
         return new ResponseEntity<>(listStudents,HttpStatus.OK);
     }
 
     public ResponseEntity<String> deleteStudent(Long id){
-        boolean studentExist = studentRepository.findById(id).isPresent();
-        if (!studentExist) {
+        Optional<Student> student = studentRepository.findById(id);
+        if (!student.isPresent()) {
             log.error(STUDENT_NO_EXIST + id);
             return new ResponseEntity<>("Estudiante no existe con ese id o ya fue eliminado", HttpStatus.BAD_REQUEST);
         }
-        studentRepository.deleteById(id);
+        LocalDate date = LocalDate.now();
+        student.get().setDeleteAt(date);
+        studentRepository.save(student.get());
         log.info("Eliminación del estudiante con id: " + id);
         return new ResponseEntity<>("El estudiante se elimino correctamente", HttpStatus.ACCEPTED);
     }
@@ -86,7 +89,7 @@ public class StudentImplService implements StudentService {
     }
 
     public ResponseEntity<Object> getStudent(Long id){
-        Optional<Student> student = studentRepository.findById(id);
+        Optional<Student> student = studentRepository.findByIdWithoutDeleteAt(id);
         if (student.isPresent()) {
             log.info("Estudiante esta presente, se muestran sus datos");
             return new ResponseEntity<>(student.get() ,HttpStatus.OK);

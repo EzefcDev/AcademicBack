@@ -1,5 +1,7 @@
 package com.schoolofliberation.academic.entities;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,4 +44,7 @@ public class Student {
     
     @Column(name = "student_career")
     private Short studentCareer;
+
+    @Column(name = "delete_at")
+    private LocalDate deleteAt;
 }
