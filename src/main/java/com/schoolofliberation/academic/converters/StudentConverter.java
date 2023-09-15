@@ -1,5 +1,6 @@
 package com.schoolofliberation.academic.converters;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,14 +14,12 @@ public class StudentConverter {
     @Autowired
     TypeRepository typeRepository;
     
-    public Student dtoToEntity(StudentDTO dto){
-        Student student = new Student();
-        student.setDni(dto.getDni());
-        student.setName(dto.getName());
-        student.setLastname(dto.getLastname());
-        student.setStudentCareer(dto.getStudentCareer());
-        student.setStudentStatus(typeRepository.findByMeaningContaining(dto.getStudentStatusMeaning()));
+    @Autowired
+    ModelMapper modelMapper;
 
+    public Student dtoToEntity(StudentDTO dto){
+        Student student = modelMapper.map(dto, Student.class);
+        student.setStudentStatus(typeRepository.findByMeaningContaining(dto.getStudentStatusMeaning()));
         return student;
     }
 }
