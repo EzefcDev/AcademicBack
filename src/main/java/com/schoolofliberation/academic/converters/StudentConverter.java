@@ -22,4 +22,10 @@ public class StudentConverter {
         student.setStudentStatus(typeRepository.findByMeaningContaining(dto.getStudentStatusMeaning()));
         return student;
     }
+
+    public StudentDTO entityToDTO(Student student){
+       StudentDTO studentDTO = modelMapper.map(student, StudentDTO.class);
+       studentDTO.setStudentStatusMeaning(student.getStudentStatus().getMeaning());
+       return studentDTO;
+    }
 }
