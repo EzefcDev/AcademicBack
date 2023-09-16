@@ -14,4 +14,6 @@ public interface StudentRepository extends JpaRepository<Student,Long>{
 
     @Query(value = "select count(*) > 0 from students where students.dni = :dni", nativeQuery = true)
     boolean existsByDni(@Param("dni") Long dni);
+
+    Student findByDni(Long dni);
 }

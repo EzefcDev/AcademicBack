@@ -64,8 +64,13 @@ public class StudentImplService implements StudentService {
 
     public ResponseEntity<String> createStudent(StudentDTO newStudent){
         if (studentRepository.existsByDni(newStudent.getDni())) {
-            log.error("El estudiante con dni: " + newStudent.getDni() + " ya existe");
-            return new ResponseEntity<>("Estudiante ya existe", HttpStatus.BAD_REQUEST);
+            if (isEqual(newStudent)) {
+                log.error("El estudiante con dni: " + newStudent.getDni() + " ya existe");
+                return new ResponseEntity<>("Estudiante ya existe", HttpStatus.BAD_REQUEST);   
+            } else {
+                log.error("El estudiante con dni: " + newStudent.getDni() + " ya existe, pero sus datos son diferentes");
+                return new ResponseEntity<>("Estudiante ya existe, pero sus datos son diferentes, debe utilizar el metodo actulizar", HttpStatus.BAD_REQUEST);    
+            }
         }
         studentRepository.save(studentConverter.dtoToEntity(newStudent));
         log.info("El estudiante se creo correctamente");
@@ -93,5 +98,10 @@ public class StudentImplService implements StudentService {
         }
         log.error(STUDENT_NO_EXIST + id);
         return new ResponseEntity<>("El estudiante con id: " + id + " no existe", HttpStatus.BAD_REQUEST);
+    }
+
+    public boolean isEqual(StudentDTO dto ){
+        StudentDTO studentDto = studentConverter.entityToDTO(studentRepository.findByDni(dto.getDni()));
+        return dto.equals(studentDto);
     }
 }
