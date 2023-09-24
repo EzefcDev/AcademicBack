@@ -12,10 +12,10 @@ import com.schoolofliberation.academic.entities.Student;
 
 public interface StudentRepository extends JpaRepository<Student,Long>{
     
-    @Query(value = "select * from students where students.name = :name and students.delete_at = '2000-01-01'", nativeQuery = true)
+    @Query(value = "select * from students where students.name = :name and students.delete_at is null", nativeQuery = true)
     Page<Student> findByNameWithoutDeleteAt(@Param("name") String name, Pageable pageable);
 
-    @Query(value = "select * from students where students.delete_at = '2000-01-01'", nativeQuery = true)
+    @Query(value = "select * from students where students.delete_at is null", nativeQuery = true)
     Page<Student> findAllWithoutDeleteAt(Pageable pageable);
 
     @Query(value = "select count(*) > 0 from students where students.dni = :dni", nativeQuery = true)
