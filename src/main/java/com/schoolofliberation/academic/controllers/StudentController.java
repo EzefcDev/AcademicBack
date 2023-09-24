@@ -62,4 +62,14 @@ public class StudentController {
     public ResponseEntity<Object> findStudent(@PathVariable(name = "id") @Min(1) Long id){
         return studentService.getStudent(id);
     } 
+
+    @Operation(summary = "Trae todos los estudiantes eliminados del sistema", description = "Muestra la lista de todos los estudiantes registrados a traves de un paginado, también podemos indicar un nombre y nos mostrar la lista de todas las coincidencias con ese nombre")
+    @GetMapping("/delete-students")
+    public ResponseEntity<Object> findAllDeleteStudents(
+        @RequestParam(defaultValue = "0") Integer page, 
+        @RequestParam(defaultValue = "10") Integer size, 
+        @RequestParam(defaultValue = "asc") String orientation,
+        @RequestParam(defaultValue = "id") String orderBy){
+        return studentService.getdeleteStudents(page, size,orientation, orderBy);
+    }
 }

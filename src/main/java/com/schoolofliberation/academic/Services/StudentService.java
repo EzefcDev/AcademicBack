@@ -16,4 +16,6 @@ public interface StudentService {
     ResponseEntity<String> updateStudent(Long id, StudentDTO studentDTO);
 
     ResponseEntity<Object> getStudent(Long id);
+
+    ResponseEntity<Object> getdeleteStudents(Integer page, Integer size,String orientation, String orderBy);
 }
