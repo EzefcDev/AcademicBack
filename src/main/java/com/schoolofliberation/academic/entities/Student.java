@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +25,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@SQLDelete( sql = "UPDATE students SET students.delete_student = CURRENT_DATE WHERE ID = ?")
+@Where(clause = "delete_student is null")
 public class Student {
     
     @Id
