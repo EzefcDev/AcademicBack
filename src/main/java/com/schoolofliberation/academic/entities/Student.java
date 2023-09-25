@@ -25,8 +25,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE students SET delete_at = CURRENT_DATE WHERE ID = ? ")
-@Where(clause = "delete_at = '2000-01-01'")
+@SQLDelete(sql = "UPDATE students SET students.delete_at = CURRENT_DATE WHERE ID = ? ")
+@Where(clause = "delete_at is null ")
 public class Student {
     
     @Id
